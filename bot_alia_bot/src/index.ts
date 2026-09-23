@@ -1,9 +1,14 @@
-//const token = "8722206711:AAF0UdMi_C2Bda9DokQzGjZ0vaCmU1-xvXs";
+//
+import "dotenv/config";
 
 import { Bot } from "node-telegram-bot-api";
 import { run } from "node-telegram-bot-api/node";
 
-const token = "8722206711:AAF0UdMi_C2Bda9DokQzGjZ0vaCmU1-xvXs";
+const token = process.env.BOT_TOKEN;
+
+if (!token) {
+    throw new Error("BOT_TOKEN is missing");
+}
 
 const bot = new Bot(token);
 
