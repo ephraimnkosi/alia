@@ -1,4 +1,4 @@
-import { Bot } from "node-telegram-bot-api";
+import { Bot, webhookCallback } from "node-telegram-bot-api";
 
 const token = process.env.BOT_TOKEN;
 
@@ -8,16 +8,34 @@ if (!token) {
 
 const bot = new Bot(token);
 
-export default async function handler(req: any, res: any) {
-    if (req.method !== "POST") {
-        return res.status(405).json({
-            message: "Method not allowed"
-        });
+bot.command("start", (ctx) => {
+    return ctx.reply("Hello! 👋 I'm Alia Bot!");
+});
+
+bot.command("help", (ctx) => {
+    return ctx.reply("Here are the commands I currently understand:\n/start\n/help");
+});
+
+bot.on("message", (ctx) => {
+    const message = ctx.message?.text?.toLowerCase();
+
+    if (!message) {
+        return;
     }
 
-    console.log("Telegram sent us an update!");
+    if (message === "hello" || message === "hi") {
+        return ctx.reply("Hey! 👋 How are you doing?");
+    }
 
-    return res.status(200).json({
-        message: "Update received"
-    });
-}
+    if (message === "how are you") {
+        return ctx.reply("I'm doing great! 😎 How about you?");
+    }
+
+    if (message === "bye") {
+        return ctx.reply("See you later! 👋");
+    }
+
+    return ctx.reply(`You said: ${message}`);
+});
+
+export default webhookCallback(bot);
